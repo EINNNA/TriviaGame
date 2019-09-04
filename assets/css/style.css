@@ -1,0 +1,49 @@
+body {
+    background-image: url("../images/background.jpg");
+    margin: 0 auto;
+    width: 920px;
+    text-align: center;
+}
+
+h1 { 
+    font-family: 'Fredoka One', cursive;
+    height: 70px;
+    background: hsla(0, 100%, 90%, 0.7);
+    border: #634313 solid 3px;
+    border-radius: 25px;
+    margin-top: 20px;
+    color: #634313;
+}
+
+h2,
+.question { 
+    font-family: 'Fredoka One', cursive;
+    color: #634313;
+}
+
+.timer {
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    color: #634313;
+    margin-bottom: 10px;
+    height: 30px;
+}
+
+
+
+.questionChoices {
+    font-family: 'Nunito', sans-serif;
+}
+
+.wrapping {
+    height: 380px;
+
+}
+
+h1,
+.timer,
+.wrapping {
+    border: #634313 solid 3px;
+    background: hsla(0, 100%, 90%, 0.7);
+    border-radius: 25px;
+}
