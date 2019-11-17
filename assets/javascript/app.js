@@ -7,7 +7,8 @@ var qA = [
         answerB: "Baking using intuition, without looking into the oven",
         answerC: "Baking without a filling",
         answerD: "Baking a blind person in the oven",
-        correct:  "C: Baking without a filling is the right answer!"
+        correctText:  "C: Baking without a filling is the right answer!",
+        correct: "answerC"
     },
     q2 = {
         question: "which flour has the highest amount of starch?",
@@ -15,7 +16,8 @@ var qA = [
         answerB: "Almond flour",
         answerC: "Starch flour",
         answerD: "All purpose flour", 
-        correct:  "A: Cake flour is the right answer!"
+        correctText:  "A: Cake flour is the right answer!",
+        correct: "answerA"
     },
     q3 = {
         question: "what is a good substitute for eggs?",
@@ -23,7 +25,8 @@ var qA = [
         answerB: "Applesauce",
         answerC: "Mayonnaise",
         answerD: "Custard",   
-        correct:  "B: Apple sauce is the right answer!"
+        correctText:  "B: Apple sauce is the right answer!",
+        correct: "answerB"
     },
     q4 = {
         question: "red velvet is which type of flavour?",
@@ -31,7 +34,8 @@ var qA = [
         answerB: "Chocolate",
         answerC: "Red flavour",
         answerD: "Vanilla", 
-        correct:  "B: Chocolate is the right answer!"
+        correctText:  "B: Chocolate is the right answer!",
+        correct: "answerB"
     },
     q5 = {
         question: "what type of cheese is used in cheesecake?",
@@ -39,7 +43,8 @@ var qA = [
         answerB: "Ricotta",
         answerC: "Goats cheese",
         answerD: "Cream cheese",
-        correct:  "D: Cream Cheese is the right answer!"
+        correctText:  "D: Cream Cheese is the right answer!",
+        correct: "answerD"
     },
     q6 = {
         question: "who started the tradition of putting candles on birthday cakes?",
@@ -47,32 +52,38 @@ var qA = [
         answerB: "Victorians",
         answerC: "Greeks",
         answerD: "Romans",  
-        correct:  "C: Greeks is the right answer! Unless your mother is greek, in which case...!"
+        correctText:  "C: Greeks is the right answer! Unless your mother is greek, in which case...!",
+        correct: "answerC"
     }
 ];
 
 var questionTime = 15;
 var breakTime = 6;
 var questionChoices = $(".questionChoices");
-var questionQuestion = $("questionHere")
+var questionHere = $(".questionHere");
+var questionA = $(".a");
+var questionB = $(".b");
+var questionC = $(".c");
+var questionD = $(".d");
+var questionAnswer = $(".correctAnswer");
+//var submit = $("#submit");
 var wins = 0;
 var lose = 0;
 
-function question() {
-  for (let i = 0; i < qA.length; i++) {
-    let q = qA[i];
-    let radio = $('<input type="radio">')
-    let submit = $('<input type="submit">')
-
-    questionChoices.append(q.question);
-    questionQuestion.append(radio + q.answerA);
-    questionQuestion.append(radio + q.answerA);
-    questionQuestion.append(submit + "submit");
-
-
-  }
-}
-
+  function question() {
+    let q = qA[0];
+    //let radio = $('<input type="radio">')
+    //let submit = $('<input type="submit">')
+    questionHere.append(q.question);
+    questionA.append('<input type="radio" name="question" value="answerA" id="a">' + q.answerA + '<br>');
+    questionB.append('<input type="radio" name="question" value="answerB" id="a">' + q.answerB + '<br>');
+    questionC.append('<input type="radio" name="question" value="answerC" id="a">' + q.answerC + '<br>');
+    questionD.append('<input type="radio" name="question" value="answerD" id="a">' + q.answerD + '<br>');
+    
+    /*if (questionTime <= 0 || ) {
+      questNumber++;
+    }*/
+  };
 
   var questionStart = setInterval(function () {
     questionTime--;
@@ -82,7 +93,18 @@ function question() {
     }
   }, 1000);
 
-  /*
+  function submittingAnswer() {
+    questionTime = 0;
+    questionChoices.on("submit", function(event){
+      event.preventdefault();
+      answer = questionChoices.serialize();
+    })
+  }
+
+  /*  function answerChecking() {
+    if (qA[questNumber].correct)
+  }
+
   var breakStart = setInterval(function () {
     breakTime--;
     $(".timer").html("<div>" + breakTime + " seconds left </div>");
