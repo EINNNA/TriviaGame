@@ -57,6 +57,8 @@ $(document).ready(function () {
     }
   ];
 
+  var gameStart = false;
+  var breakStart = false;
   var questionTime = 15;
   var breakTime = 6;
   var questionChoices = $(".questionChoices");
@@ -65,14 +67,16 @@ $(document).ready(function () {
   var questionB = $(".b");
   var questionC = $(".c");
   var questionD = $(".d");
-  var answer = $(".questionChoices").serialize();
+  var submit = $("#submit");
   var questionAnswer = $(".correctAnswer");
   var wins = 0;
   var lose = 0;
+  var i = 0;
 
 
   function question() {
-    let i = 0;
+    questionAnswer.empty();
+
     let q = qA[i];
     questionHere.append(q.question);
     questionA.append('<input type="radio" name="question" value="answerA" id="a">' + q.answerA + '<br>');
@@ -84,47 +88,71 @@ $(document).ready(function () {
   //TIMING
   function questionTimef() {
     setInterval(function () {
-      questionTime--;
-      $(".timer").html("<div>" + questionTime + " seconds left </div>");
-      if (questionTime == 0) {
+      if (gameStart) {
+        questionTime--;
+        $(".timer").html("<div>" + questionTime + " seconds left </div>");
+      }
+      else if (questionTime ===0) {
         questionEnd();   
+        breakBreak();
+        gameStart = false;
+        breakStart = true;
+        i++;
+        questionTime = 15;
       }
     }, 1000)
   };
 
+  function breakBreak() {
+    setInterval(function () {
+      if (breakStart && breakTime > 0) {
+        giveAnswer();
+        breakTime--;
+        $(".timer").html("<div>" + breakTime + " break seconds left </div>");
+        questionAnswer.append(q.correctText);
+      }
+      else if (breakTime ===0) {
+        questionEnd();   
+        gameStart = true;
+        breakTime = false;
+        i++;
+        questionTime = 15;
+      }
+    }, 1000)
+
+  }
+
+  function giveAnswer() {
+    questionChoices.empty();
+    questionHere.empty();
+    questionA.empty();
+    questionB.empty();
+    questionC.empty();
+    questionD.empty();
+  };
+
   function questionEnd() {
     clearInterval(question());
-    i++;
-    questionChoices.text("");
-    questionHere.text("");
-    questionA.text("");
-    questionB.text("");
-    questionC.text("");
-    questionD.text("");
-    questionTime = 15;
   };
 
   //ANSWERS
   function submittingAnswer() {
-    questionChoices.on("submit", function (e) {
+    var answer = $(this).attr("value");
+    submit.on("click", function (e) {
       e.preventdefault();
-      questionAnswer.append(q.correctText);
-      setInterval(function () {
-        breakTime--;
-        if (answer.toString() == q.correctAnswer) {
+        if (answer == q.correctAnswer) {
           wins++;
         }
         else {
           lose++;
         }
       });
-      questionEnd();
-    });
   };
 
   function restartGame() {
     //RESTART PAGE BUTTON
     $(".start2").on("click", function () {
+      gameStart = false;
       $(".game").removeClass("hide");
       $(".score").text("Correct: " + wins + "Incorrect: " + lose);
     });
@@ -134,6 +162,7 @@ $(document).ready(function () {
   $(".start").on("click", function () {
     $(".startingPage").addClass("hide");
     $(".game").removeClass("hide");
+    gameStart = true;
   });
 
   question();
