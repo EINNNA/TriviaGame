@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
   var qA = [
-    q1 = {
+    {
       question: "what is blind baking?",
       answerA: "A blind person who is baking",
       answerB: "Baking using intuition, without looking into the oven",
@@ -10,7 +10,7 @@ $(document).ready(function () {
       correctText: "C: Baking without a filling is the right answer!",
       correct: "answerC"
     },
-    q2 = {
+    {
       question: "which flour has the highest amount of starch?",
       answerA: "Cake flour",
       answerB: "Almond flour",
@@ -19,7 +19,7 @@ $(document).ready(function () {
       correctText: "A: Cake flour is the right answer!",
       correct: "answerA"
     },
-    q3 = {
+    {
       question: "what is a good substitute for eggs?",
       answerA: "Milk",
       answerB: "Applesauce",
@@ -28,7 +28,7 @@ $(document).ready(function () {
       correctText: "B: Apple sauce is the right answer!",
       correct: "answerB"
     },
-    q4 = {
+    {
       question: "red velvet is which type of flavour?",
       answerA: "Strawberry",
       answerB: "Chocolate",
@@ -37,7 +37,7 @@ $(document).ready(function () {
       correctText: "B: Chocolate is the right answer!",
       correct: "answerB"
     },
-    q5 = {
+    {
       question: "what type of cheese is used in cheesecake?",
       answerA: "Brie",
       answerB: "Ricotta",
@@ -46,7 +46,7 @@ $(document).ready(function () {
       correctText: "D: Cream Cheese is the right answer!",
       correct: "answerD"
     },
-    q6 = {
+    {
       question: "who started the tradition of putting candles on birthday cakes?",
       answerA: "Ur mom",
       answerB: "Victorians",
@@ -61,7 +61,6 @@ $(document).ready(function () {
   var breakStart = false;
   var questionTime = 15;
   var breakTime = 6;
-  var questionChoices = $(".questionChoices");
   var questionHere = $(".questionHere");
   var questionA = $(".a");
   var questionB = $(".b");
@@ -72,58 +71,57 @@ $(document).ready(function () {
   var wins = 0;
   var lose = 0;
   var i = 0;
+  var q;
+  var questionInterval;
 
 
   function question() {
-    questionAnswer.empty();
-
-    let q = qA[i];
+    clearQuestionsAndAnswers();
+    q = qA[i];
     questionHere.append(q.question);
-    questionA.append('<input type="radio" name="question" value="answerA" id="a">' + q.answerA + '<br>');
-    questionB.append('<input type="radio" name="question" value="answerB" id="a">' + q.answerB + '<br>');
-    questionC.append('<input type="radio" name="question" value="answerC" id="a">' + q.answerC + '<br>');
-    questionD.append('<input type="radio" name="question" value="answerD" id="a">' + q.answerD + '<br>');
+    questionA.append('<input type="radio" name="answer" value="answerA" id="a">' + q.answerA + '<br>');
+    questionB.append('<input type="radio" name="answer" value="answerB" id="a">' + q.answerB + '<br>');
+    questionC.append('<input type="radio" name="answer" value="answerC" id="a">' + q.answerC + '<br>');
+    questionD.append('<input type="radio" name="answer" value="answerD" id="a">' + q.answerD + '<br>');
+    questionTimef();
   };
 
   //TIMING
   function questionTimef() {
-    setInterval(function () {
+    questionInterval = setInterval(function () {
       if (gameStart) {
         questionTime--;
         $(".timer").html("<div>" + questionTime + " seconds left </div>");
       }
-      else if (questionTime ===0) {
-        questionEnd();   
-        breakBreak();
-        gameStart = false;
-        breakStart = true;
+      if (questionTime <= 0) {
+        questionEnd();  
         i++;
         questionTime = 15;
+        question();
       }
     }, 1000)
   };
 
-  function breakBreak() {
-    setInterval(function () {
-      if (breakStart && breakTime > 0) {
-        giveAnswer();
-        breakTime--;
-        $(".timer").html("<div>" + breakTime + " break seconds left </div>");
-        questionAnswer.append(q.correctText);
-      }
-      else if (breakTime ===0) {
-        questionEnd();   
-        gameStart = true;
-        breakTime = false;
-        i++;
-        questionTime = 15;
-      }
-    }, 1000)
+  // function breakBreak() {
+  //   setInterval(function () {
+  //     if (breakStart && breakTime > 0) {
+  //       giveAnswer();
+  //       breakTime--;
+  //       $(".timer").html("<div>" + breakTime + " break seconds left </div>");
+  //       questionAnswer.append(q.correctText);
+  //     }
+  //     else if (breakTime ===0) {
+  //       questionEnd();   
+  //       gameStart = true;
+  //       breakTime = false;
+  //       i++;
+  //       questionTime = 15;
+  //     }
+  //   }, 1000)
 
-  }
+  // }
 
-  function giveAnswer() {
-    questionChoices.empty();
+  function clearQuestionsAndAnswers() {
     questionHere.empty();
     questionA.empty();
     questionB.empty();
@@ -132,22 +130,33 @@ $(document).ready(function () {
   };
 
   function questionEnd() {
-    clearInterval(question());
+    clearInterval(questionInterval);
   };
 
+  function nextQuestion(){
+    questionTime = 15;
+    i++;
+    question();
+  }
+
+  submit.on("click", submitAnswer);
+
   //ANSWERS
-  function submittingAnswer() {
-    var answer = $(this).attr("value");
-    submit.on("click", function (e) {
-      e.preventdefault();
+  function submitAnswer(e) {
+    var answer = $("input[name='answer']:checked"). val();
+      e.preventDefault();
         if (answer == q.correctAnswer) {
           wins++;
         }
         else {
           lose++;
         }
-      });
+        questionEnd();
+        nextQuestion();
   };
+
+
+
 
   function restartGame() {
     //RESTART PAGE BUTTON
@@ -167,6 +176,4 @@ $(document).ready(function () {
 
   question();
   questionTimef();
-  console.log(qA);
-  submittingAnswer();
 });
